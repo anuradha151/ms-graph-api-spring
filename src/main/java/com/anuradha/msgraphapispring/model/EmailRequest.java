@@ -2,9 +2,9 @@ package com.anuradha.msgraphapispring.model;
 
 public class EmailRequest {
 	
-	String subject;
-	String message;
-	String recipient;
+	private String subject;
+	private String message;
+	private String recipient;
 
 	public String getSubject() {
 		return subject;

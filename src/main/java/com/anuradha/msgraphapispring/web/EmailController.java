@@ -1,7 +1,7 @@
 package com.anuradha.msgraphapispring.web;
 
-import com.slightinsight.emailapi.model.EmailRequest;
-import com.slightinsight.emailapi.service.EmailService;
+import com.anuradha.msgraphapispring.model.EmailRequest;
+import com.anuradha.msgraphapispring.service.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class EmailController {
 	
 	@Autowired
-	EmailService emailService;
+	private EmailService emailService;
 	
 	Logger log = LoggerFactory.getLogger(getClass());
 	

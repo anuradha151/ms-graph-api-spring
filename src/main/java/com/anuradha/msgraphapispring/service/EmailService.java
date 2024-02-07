@@ -1,8 +1,8 @@
 package com.anuradha.msgraphapispring.service;
 
+import com.anuradha.msgraphapispring.model.EmailRequest;
 import com.microsoft.graph.models.*;
 import com.microsoft.graph.requests.GraphServiceClient;
-import com.slightinsight.emailapi.model.EmailRequest;
 import okhttp3.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
