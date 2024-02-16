@@ -15,40 +15,44 @@ import java.util.LinkedList;
 @Service
 public class EmailService {
 
-	@Value("${spring.mail.username}")
-	private String sender;
+    @Value("${spring.mail.username}")
+    private String sender;
 
-	@Autowired
-	private GraphServiceClient<Request> mailClient;
+    @Autowired
+    private GraphServiceClient<Request> mailClient;
 
-	Logger log = LoggerFactory.getLogger(getClass());
+    Logger log = LoggerFactory.getLogger(getClass());
 
-	public void sendEmail(EmailRequest emailRequest) {
+    public void sendEmail(EmailRequest emailRequest) {
 
-		log.info("Preparing email");
+        log.info("Preparing email");
 
-		Message message = new Message();
+        Message message = new Message();
 
-		message.subject = emailRequest.getSubject();
+        message.subject = emailRequest.getSubject();
 
-		ItemBody body = new ItemBody();
-		body.contentType = BodyType.HTML;
-		body.content = emailRequest.getMessage();
-		message.body = body;
+        ItemBody body = new ItemBody();
+        body.contentType = BodyType.HTML;
+        body.content = emailRequest.getMessage();
+        message.body = body;
 
-		LinkedList<Recipient> toRecipientsList = new LinkedList<Recipient>();
-		Recipient toRecipients = new Recipient();
-		EmailAddress emailAddress = new EmailAddress();
-		emailAddress.address = emailRequest.getRecipient();
-		toRecipients.emailAddress = emailAddress;
-		toRecipientsList.add(toRecipients);
-		message.toRecipients = toRecipientsList;
+        LinkedList<Recipient> toRecipientsList = new LinkedList<Recipient>();
+        Recipient toRecipients = new Recipient();
+        EmailAddress emailAddress = new EmailAddress();
+        emailAddress.address = emailRequest.getRecipient();
+        toRecipients.emailAddress = emailAddress;
+        toRecipientsList.add(toRecipients);
+        message.toRecipients = toRecipientsList;
 
-		// Send the message
-		log.info("sending email");
-		mailClient.users(sender).sendMail(UserSendMailParameterSet.newBuilder().withMessage(message).build())
-				.buildRequest().post();
+        // Send the message
+        log.info("sending email");
+        mailClient.users(sender)
+                .sendMail(
+                        UserSendMailParameterSet.newBuilder()
+                                .withMessage(message)
+                                .build())
+                .buildRequest().post();
 
-	}
+    }
 
 }
