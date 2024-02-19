@@ -25,8 +25,6 @@ public class EmailService {
 
     public void sendEmail(EmailRequest emailRequest) {
 
-        log.info("Preparing email");
-
         Message message = new Message();
 
         message.subject = emailRequest.getSubject();
@@ -45,7 +43,6 @@ public class EmailService {
         message.toRecipients = toRecipientsList;
 
         // Send the message
-        log.info("sending email");
         mailClient.users(sender)
                 .sendMail(
                         UserSendMailParameterSet.newBuilder()
