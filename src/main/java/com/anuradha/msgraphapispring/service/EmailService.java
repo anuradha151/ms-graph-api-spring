@@ -5,6 +5,8 @@ import com.anuradha.msgraphapispring.model.EmailRequest;
 import com.microsoft.graph.models.*;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
 import com.microsoft.graph.users.item.UserItemRequestBuilder;
+import com.microsoft.graph.users.item.sendmail.SendMailPostRequestBody;
+import com.microsoft.graph.users.item.sendmail.SendMailRequestBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,31 +29,27 @@ public class EmailService {
 
     public void sendEmail(EmailRequest emailRequest) {
 
-//        Message message = new Message();
-//
-//        message.subject = emailRequest.getSubject();
-//
-//        ItemBody body = new ItemBody();
-//        body.contentType = BodyType.HTML;
-//        body.content = emailRequest.getMessage();
-//        message.body = body;
-//
-//        LinkedList<Recipient> toRecipientsList = new LinkedList<Recipient>();
-//        Recipient toRecipients = new Recipient();
-//        EmailAddress emailAddress = new EmailAddress();
-//        emailAddress.address = emailRequest.getRecipient();
-//        toRecipients.emailAddress = emailAddress;
-//        toRecipientsList.add(toRecipients);
-//        message.toRecipients = toRecipientsList;
-//
-//        // Send the message
-//        mailClient.users(sender)
-//                .sendMail(
-//                        UserSendMailParameterSet.newBuilder()
-//                                .withMessage(message)
-//                                .build())
-//                .buildRequest().post();
+        SendMailPostRequestBody sendMailPostRequestBody = new SendMailPostRequestBody();
+        Message message = new Message();
+        message.setSubject(emailRequest.getSubject());
 
+        ItemBody body = new ItemBody();
+        body.setContentType(BodyType.Html);
+        body.setContent(emailRequest.getMessage());
+        message.setBody(body);
+
+        LinkedList<Recipient> toRecipientsList = new LinkedList<>();
+        Recipient toRecipients = new Recipient();
+        EmailAddress emailAddress = new EmailAddress();
+        emailAddress.setAddress(emailRequest.getRecipient());
+        toRecipients.setEmailAddress(emailAddress);
+        toRecipientsList.add(toRecipients);
+        message.setToRecipients(toRecipientsList);
+
+        sendMailPostRequestBody.setMessage(message);
+        sendMailPostRequestBody.setSaveToSentItems(true);
+
+        mailClient.users().byUserId(sender).sendMail().post(sendMailPostRequestBody);
 
     }
 
