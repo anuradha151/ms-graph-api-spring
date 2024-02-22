@@ -22,14 +22,16 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+			<!-- Include the sdk as a dependency -->
 			<groupId>com.microsoft.graph</groupId>
 			<artifactId>microsoft-graph</artifactId>
-			<version>[5.0,)</version>
+			<version>6.2.1</version>
 		</dependency>
 		<dependency>
+			<!-- This dependency is only needed if you are using a TokenCredential object for authentication -->
 			<groupId>com.azure</groupId>
 			<artifactId>azure-identity</artifactId>
-			<version>[1.3,)</version>
+			<version>1.11.0</version>
 		</dependency>
 
 		<dependency>

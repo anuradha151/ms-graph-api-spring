@@ -2,8 +2,7 @@ package com.anuradha.msgraphapispring.config;
 
 import com.azure.identity.ClientSecretCredential;
 import com.azure.identity.ClientSecretCredentialBuilder;
-import com.microsoft.graph.authentication.TokenCredentialAuthProvider;
-import com.microsoft.graph.requests.GraphServiceClient;
+import com.microsoft.graph.serviceclient.GraphServiceClient;
 import okhttp3.Request;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -23,22 +22,12 @@ public class MailConfig {
     @Value("${spring.security.oauth2.client.registration.azure.client-secret}")
     private String clientSecret;
 
-    private GraphServiceClient<Request> initializeGraphForAppOnlyAuth() {
-
-        ClientSecretCredential clientSecretCredential = new ClientSecretCredentialBuilder().clientId(clientId)
+    @Bean
+    public GraphServiceClient mailClient() {
+        ClientSecretCredential credential= new ClientSecretCredentialBuilder().clientId(clientId)
                 .tenantId(tenantId)
                 .clientSecret(clientSecret).build();
-
-        // Use the .default scope when using app-only auth
-        final TokenCredentialAuthProvider authProvider = new TokenCredentialAuthProvider(
-                List.of("https://graph.microsoft.com/.default"), clientSecretCredential);
-
-        return GraphServiceClient.builder().authenticationProvider(authProvider).buildClient();
-    }
-
-    @Bean
-    public GraphServiceClient<Request> mailClient() {
-        return initializeGraphForAppOnlyAuth();
+        return new GraphServiceClient(credential, "https://graph.microsoft.com/.default");
     }
 
 }
