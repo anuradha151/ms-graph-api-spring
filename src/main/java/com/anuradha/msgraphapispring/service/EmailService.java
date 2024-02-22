@@ -1,5 +1,6 @@
 package com.anuradha.msgraphapispring.service;
 
+import com.anuradha.msgraphapispring.dto.MessageResponseDto;
 import com.anuradha.msgraphapispring.model.EmailRequest;
 import com.microsoft.graph.models.*;
 import com.microsoft.graph.serviceclient.GraphServiceClient;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
+import java.util.List;
 
 @Service
 public class EmailService {
@@ -49,14 +51,36 @@ public class EmailService {
 //                                .withMessage(message)
 //                                .build())
 //                .buildRequest().post();
-//
-
-    }
-
-    public void listMessages(){
-        MessageCollectionResponse result = mailClient.users().byUserId(sender).messages().get();
 
 
     }
+
+    public List<MessageResponseDto> listMessages() {
+        MessageCollectionResponse messageCollectionResponse = mailClient.users().byUserId(sender).messages().get();
+        if (messageCollectionResponse == null || messageCollectionResponse.getValue() == null)
+            throw new RuntimeException("No messages found");
+        return messageCollectionResponse.getValue().stream()
+                .map(this::toMessageResponseDto)
+                .toList();
+
+
+    }
+
+    private MessageResponseDto toMessageResponseDto(Message message) {
+
+        String sender = message.getSender() != null && message.getSender().getEmailAddress() != null
+                ? message.getSender().getEmailAddress().getAddress()
+                : "";
+        String subject = message.getSubject() != null ? message.getSubject() : "";
+        String content = message.getBody() != null ? message.getBody().getContent() : "";
+
+
+        return new MessageResponseDto(
+                sender,
+                subject,
+                content
+        );
+    }
+
 
 }
