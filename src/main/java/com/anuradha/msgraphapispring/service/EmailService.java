@@ -60,8 +60,6 @@ public class EmailService {
         return messageCollectionResponse.getValue().stream()
                 .map(this::toMessageResponseDto)
                 .toList();
-
-
     }
 
     private MessageResponseDto toMessageResponseDto(Message message) {
